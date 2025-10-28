@@ -1,13 +1,23 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { AuthContext } from "../context/AuthProvider.tsx"
-import { Alert } from "react-bootstrap"
+import { Alert, Button } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
+
 
 export default function Post() {
   const { usuario } = useContext(AuthContext)
+
+  useEffect(() => {
+    document.title = "Anti-Social | Crear Post"
+  }, [])
+
+  const navigate = useNavigate();
+
   if (!usuario) {
     return (
       <Alert variant="warning" className="mt-3">
-        Acceso restringido
+        <p>Acceso restringido. Por favor, inicia sesión para crear un post.</p>
+        <Button onClick={() => navigate("/login")} variant="dark">Iniciar sesión</Button>
       </Alert>
     )
   }

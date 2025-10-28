@@ -1,9 +1,14 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Button, Form, Card } from "react-bootstrap"
 import { Navigate, useNavigate } from "react-router-dom"
 import { AuthContext, useAuth } from "../context/AuthProvider"
 
 export default function Login() {
+
+  useEffect(() => {
+    document.title = "Anti-Social | Iniciar Sesion"
+  }, [])
+
   const [logi, setLogin] = useState({
     clave: "",
     nickname: ""
@@ -52,7 +57,7 @@ export default function Login() {
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Control type="password" placeholder="Ingrese contraseña" name="clave" onChange={manejarCambio} />
               </Form.Group>
-              <Button className="w-100" variant="primary" type="submit">
+              <Button className="w-100" variant="dark" type="submit">
                 Iniciar Sesion
               </Button>
             </Form>

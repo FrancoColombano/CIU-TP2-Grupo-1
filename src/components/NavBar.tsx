@@ -15,7 +15,9 @@ function ColorSchemesExample() {
     return (
         <Navbar bg="dark" data-bs-theme="dark">
             <Container>
-                <Navbar.Brand as={Link} to={"/"}>Navbar</Navbar.Brand>
+                <Navbar.Brand as={Link} to={"/"}>
+                <img src="./LogoRedSocialOscuro.png" alt="Logo red social" className='img-fluid' style={{width: '60px'}} />
+                </Navbar.Brand>
                 <Nav className="me-auto">
                     <Nav.Link as={NavLink} to={"/"}>Inicio</Nav.Link>
                     <Nav.Link as={NavLink} to={"/login"}>Iniciar Sesión</Nav.Link>
