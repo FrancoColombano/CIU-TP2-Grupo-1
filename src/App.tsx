@@ -13,14 +13,14 @@ function App() {
 
   return (   
       <AuthProvider>
-        <Header />
+        <Footer />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/usuario" element={<PerfilUsuario />} />
           <Route path="/post" element={<Post />} />
         </Routes>
-        <Footer />
+
       </AuthProvider>
   )
 }

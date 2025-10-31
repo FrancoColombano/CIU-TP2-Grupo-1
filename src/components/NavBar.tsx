@@ -25,7 +25,7 @@ function ColorSchemesExample() {
                     <Nav.Link as={NavLink} to={"/usuario"}>Perfil Usuario</Nav.Link>
                 </Nav>
             </Container>
-            {usuario && <Button variant="outline-light" onClick={logout}>Cerrar Sesión</Button>}
+            {usuario && <Button className = "mx-3" variant="outline-light" onClick={logout}>Cerrar Sesión</Button>}
         </Navbar>
     );
 }
