@@ -1,47 +1,18 @@
 .sidebar-footer {
     position: fixed;
-    left: -240px;
+    left: 0px;
     top: 75px;    
-    height: calc(100vh - 75px);
+    height: calc(100vh - 55px);
     width: 250px;
     background-color: #212529;
     border-right: 10px solid #f50505;
-    z-index: 1000;
+    z-index: 10;
     overflow-y: auto;
     padding: 16px;
-    transition: left 0.3s ease;
+    
     
 }
 
-/* Aparece cuando pasas el cursor */
-.sidebar-footer:hover {
-    left: 0;
-}
-
-/* Trigger o disparador invisible para activar el hover más fácil */
-.sidebar-footer::before {
-    content: '';
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 5px;
-    /* Área sensible al hover */
-    height: 50vh;
-    z-index: -1;
-}
-
-.sidebar-footer h5 {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.sidebar-footer:hover h5 {
-    opacity: 1;
-}
-
-.sidebar-footer ul {
-    padding: 0;
-}
 
 .sidebar-footer li {
     margin-bottom: 5px;
@@ -61,23 +32,61 @@
     min-width: 24px;
 }
 
-.sidebar-footer a span {
-    opacity: 0;
-    transition: opacity 0.3s ease;
+/* Empuja el footer al fondo */
+.sidebar-bottom-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    font-size: 11px;
+    color: #8e8e8e;
+    line-height: 1.5;
 }
 
-.sidebar-footer:hover a span {
-    opacity: 1;
+.footer-links {
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 4px;
+    align-items: center;
 }
+
+.footer-links a,
+.footer-links Link { 
+    color: #8e8e8e;
+    text-decoration: none;
+    transition: color 0.2s;
+    padding: 0;
+    margin: 0;
+    display: inline-block;  
+    font-size: 11px;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    background-color: transparent;
+}
+
+.footer-links a::after {
+    content: ' ·';
+    margin-left: 4px;
+    margin-right: 4px;
+    color: #8e8e8e;
+}
+
+.footer-links a:last-child::after {
+    content: '';
+}
+
+.footer-copyright {
+    margin: 0;
+    font-size: 11px;
+}
+
 
 .sidebar-footer a:hover {
     background-color: #7a7979;
 }
 
-/* No ajustar el body ya que está oculto por defecto */
-body {
-    padding-left: 0;
-}
+
 
 /* Responsive: bottom bar en mobile (sin auto-hide) */
 @media (max-width: 768px) {

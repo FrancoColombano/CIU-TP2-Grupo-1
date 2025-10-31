@@ -6,11 +6,11 @@ export default function Footer(): ReactElement {
 
   return (
     <aside className="sidebar-footer">
-      <Container fluid className="h-100 d-flex flex-column py-4">
+      <Container className="h-100 d-flex flex-column py-4">
         <div className="mb-4">
           <h5 className="fw-bold text-light">Anti-Social Net</h5>
         </div>
-        
+
         <ul className="list-unstyled d-flex flex-column">
           <li className="mb-3">
             <Link to="/" className="text-light text-decoration-none d-flex align-items-center p-2 rounded">
@@ -37,7 +37,18 @@ export default function Footer(): ReactElement {
             </Link>
           </li>
         </ul>
+        <div className="sidebar-bottom-footer">
+          <div className="footer-links">
+            <Link to="/">Inicio</Link>
+            <Link to="/usuario">Perfil</Link>
+            <Link to="/prensa">Prensa</Link>            
+            <Link to="/empleo">Empleo</Link>            
+            <Link to="/condiciones">Terminos y Condiciones</Link>
+            <Link to="/ubicaciones">Nosotros</Link>            
+          </div>
+          <p className="footer-copyright">© 2025 Anti-Social Net</p>
+        </div>
       </Container>
-    </aside>
+    </aside >
   );
 }
