@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from "react"
-import { Button, Form, Card } from "react-bootstrap"
+import { useEffect, useState } from "react"
+import { Button, Form, Card, Alert } from "react-bootstrap"
 import { Navigate, useNavigate } from "react-router-dom"
-import { AuthContext, useAuth } from "../context/AuthProvider"
+import { useAuth } from "../context/AuthProvider"
+import type { Usuario } from "../types/tipos"
 
 export default function Login() {
 
@@ -9,98 +10,215 @@ export default function Login() {
     document.title = "Anti-Social | Iniciar Sesion"
   }, [])
 
-  const [logi, setLogin] = useState({
-    clave: "",
-    nickname: ""
+  const [loginForm, setLoginForm] = useState({ // manejar estado del formulario de login
+    nickName: "",
+    clave: ""
   })
-  const { login } = useAuth()
 
-  const { usuario } = useContext(AuthContext)
+  const [registroForm, setRegistroForm] = useState({ // manejar estado del formulario de registro
+    nickName: "",
+    email: "",
+    clave: ""
+  })
 
-
-  const [estaLogueado, setEstaLogueado] = useState(true)
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
+  const [error, setError] = useState("") // manejar errores de login/registro
+  const { login, usuario } = useAuth() // obtener función de login y usuario actual desde el contexto de autenticación
+  const [tieneUsuario, setTieneUsuario] = useState(true) // estado para alternar entre login y registro
 
   const claveMaestra: string = "123456"
   const navigate = useNavigate()
 
-  const manejarCambio = (e) => {
+  // Handler para el formulario de LOGIN, basicamente actualiza el estado del formulario cada vez que hay un cambio
+  const manejarCambioLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setLogin({
-      ...logi,
+    setLoginForm(prev => ({
+      ...prev,
       [name]: value
-    })
+    }))
   }
 
+  // Handler para el formulario de REGISTRO, lo mismo que el de login pero para el registro
+  const manejarCambioRegistro = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setRegistroForm(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
 
-  const manejarSubmit = (e) => {
+  // Cargar usuarios desde el backend al iniciar el componente
+  useEffect(() => {
+    fetch("http://localhost:3000/user/")
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener usuarios")
+        return res.json()
+      })
+      .then((data) => setUsuarios(data))
+      .catch((err) => setError(err.message))
+  }, [])
+
+  // Submit del LOGIN, verifica la clave maestra y si el usuario existe
+  const manejarSubmitLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    if (logi.clave === claveMaestra) {
-      login(logi.nickname)
-      navigate("/usuario")
+    setError("") // Limpiar errores previos
+
+    if (loginForm.clave !== claveMaestra) {
+      setError("Clave incorrecta")
+      return
     }
+
+    const usuarioEncontrado = usuarios.find((u) => u.nickName === loginForm.nickName) // busca si algun usuario tiene el nickName ingresado
+
+    if (!usuarioEncontrado) {
+      setError("Usuario no encontrado")
+      return
+    }
+
+    login(usuarioEncontrado)
+    navigate("/usuario")
   }
-  if (usuario) {
+
+  // Submit del REGISTRO, crea un nuevo usuario en el backend
+  const manejarSubmitRegistro = (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+
+    // Validar campos obligatorios
+    if (!registroForm.nickName || !registroForm.email || !registroForm.clave) {
+      setError("Todos los campos son obligatorios")
+      return
+    }
+
+    fetch("http://localhost:3000/user/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nickName: registroForm.nickName,
+        email: registroForm.email
+      })
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(errorData.message || "Error al crear usuario")
+          })
+        }
+        return response.json()
+      })
+      .then((usuarioCreado) => {
+        // Loguea automáticamente al usuario creado
+        login(usuarioCreado)
+        navigate("/usuario")
+      })
+      .catch((err: any) => {
+        setError(err.message)
+      })
+  }
+
+  if (usuario) { // si ya hay un usuario logueado, redirige a la pagina de usuario cuando intenta acceder a login
+    return <Navigate to="/usuario" />
+  }
+
+  if (tieneUsuario) { // si el usuario ya tiene cuenta, muestra el formulario de login
     return (
-      <Navigate to="/usuario" />
+      <Card style={{ width: '18rem' }} className="container">
+        <Card.Body>
+          <Card.Title className="d-block text-center mb-3">Iniciar Sesión</Card.Title>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={manejarSubmitLogin}>
+            <Form.Group className="mb-3" controlId="nickName">
+              <Form.Control
+                type="text"
+                placeholder="Ingrese nickname"
+                name="nickName"
+                value={loginForm.nickName}
+                onChange={manejarCambioLogin}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="clave">
+              <Form.Control
+                type="password"
+                placeholder="Ingrese contraseña"
+                name="clave"
+                value={loginForm.clave}
+                onChange={manejarCambioLogin}
+              />
+            </Form.Group>
+            <Button className="w-100" variant="dark" type="submit">
+              Iniciar Sesion
+            </Button>
+          </Form>
+          <Card.Link
+            className="d-block text-center mt-2"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              setError("") // Limpiar errores al cambiar de formulario
+              setTieneUsuario(false)
+            }}
+          >
+            ¿No tenés cuenta? Registrate
+          </Card.Link>
+        </Card.Body>
+      </Card>
     )
   }
-  if (estaLogueado) {
-    return (
-      <>
-        <Card style={{ width: '18rem' }} className="container">
-          <Card.Body>
-            <Card.Title className="d-block text-center mb-3">Iniciar Sesión</Card.Title>
-            <Form onSubmit={manejarSubmit}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control type="text" placeholder="Ingrese nickname" name="nickname" onChange={manejarCambio} />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control type="password" placeholder="Ingrese contraseña" name="clave" onChange={manejarCambio} />
-              </Form.Group>
-              <Button className="w-100" variant="dark" type="submit">
-                Iniciar Sesion
-              </Button>
-            </Form>
-            <Card.Link className="d-block text-center mt-2" href="#" onClick={() => setEstaLogueado(false)}>¿No tenés cuenta? Registrate</Card.Link>
-          </Card.Body>
-        </Card>
-      </>
-    )
-  }
+
   return (
     <Card style={{ width: '18rem' }} className="container">
       <Card.Body>
         <Card.Title className="d-block text-center mb-3">Crea tu cuenta</Card.Title>
-        <Form onSubmit={manejarSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control type="email" placeholder="Ingrese email" name="email" onChange={manejarCambio} />
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Form onSubmit={manejarSubmitRegistro}>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Control
+              type="email"
+              placeholder="Ingrese email"
+              name="email"
+              value={registroForm.email}
+              onChange={manejarCambioRegistro}
+              required
+            />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control type="text" placeholder="Ingrese nickname" name="nickname" onChange={manejarCambio} />
+          <Form.Group className="mb-3" controlId="nickName">
+            <Form.Control
+              type="text"
+              placeholder="Ingrese nickname"
+              name="nickName"
+              value={registroForm.nickName}
+              onChange={manejarCambioRegistro}
+              required
+            />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicDate">
-            <Form.Label>Fecha de Nacimiento</Form.Label>
-            <Form.Control type="date" placeholder="Ingrese fecha de nacimiento" name="fechaNacimiento" onChange={manejarCambio} />
+          <Form.Group className="mb-3" controlId="clave">
+            <Form.Control
+              type="password"
+              placeholder="Crea una contraseña"
+              name="clave"
+              value={registroForm.clave}
+              onChange={manejarCambioRegistro}
+              required
+            />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicGender">
-            <Form.Label>Género</Form.Label>
-            <Form.Select aria-label="Default select example" name="genero" onChange={manejarCambio}>
-              <option>Seleccione género</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Masculino">Masculino</option>
-              <option value="No binario">No binario</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control type="password" placeholder="Contraseña nueva" name="clave" onChange={manejarCambio} />
-          </Form.Group>
-          <Button className="w-100" variant="primary" type="submit">
+          <Button className="w-100" variant="dark" type="submit">
             Registrate
           </Button>
         </Form>
-        <Card.Link className="d-block text-center mt-2" href="#" onClick={() => setEstaLogueado(true)}>¿Ya tenés cuenta? Inicia Sesión</Card.Link>
+        <Card.Link
+          className="d-block text-center mt-2"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            setError("")
+            setTieneUsuario(true)
+          }}
+        >
+          ¿Ya tenés cuenta? Inicia Sesión
+        </Card.Link>
       </Card.Body>
     </Card>
   )
 }
-

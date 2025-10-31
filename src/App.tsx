@@ -11,17 +11,31 @@ import AuthProvider from "./context/AuthProvider";
 
 function App() {
 
-  return (   
-      <AuthProvider>
-        <Footer />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/usuario" element={<PerfilUsuario />} />
-          <Route path="/post" element={<Post />} />
-        </Routes>
+  return (
+    <AuthProvider>
+      <div className="app-container">
+        {/* Columna izquierda - Navegación */}
+        <aside className="sidebar-left">
+          <Header />
+        </aside>
 
-      </AuthProvider>
+        {/* Columna central - Contenido principal */}
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/usuario" element={<PerfilUsuario />} />
+            <Route path="/post" element={<Post />} />
+          </Routes>
+        </main>
+
+        {/* Columna derecha - Footer/Widgets */}
+        <aside className="sidebar-right">
+          <Footer />
+        </aside>
+      </div>
+
+    </AuthProvider>
   )
 }
 

@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react"
-import { AuthContext } from "../context/AuthProvider.tsx"
+import { useEffect } from "react"
+import { useAuth } from "../context/AuthProvider.tsx"
 import { Alert, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 export default function PerfilUsuario() {
-  const { usuario } = useContext(AuthContext)
+  const { usuario } = useAuth()
 
   useEffect(() => {
-    document.title = `Anti-Social - Perfil ${usuario ? usuario.nickname : 'Usuario'}`
+    document.title = `Anti-Social - Perfil ${usuario ? usuario.nickName : 'Usuario'}`
   }, [usuario])
 
   const navigate = useNavigate()
@@ -23,7 +23,7 @@ export default function PerfilUsuario() {
 
   return (
     <div>
-      <h1>Bienvenido {usuario.nickname}</h1>
+      <h1>Bienvenido {usuario.nickName}</h1>
     </div>
   )
 }
