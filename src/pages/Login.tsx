@@ -56,7 +56,7 @@ export default function Login() {
       })
       .then((data) => setUsuarios(data))
       .catch((err) => setError(err.message))
-  }, [])
+  }, [tieneUsuario])
 
   // Submit del LOGIN, verifica la clave maestra y si el usuario existe
   const manejarSubmitLogin = (e: React.FormEvent) => {
@@ -110,8 +110,10 @@ export default function Login() {
       })
       .then((usuarioCreado) => {
         // Loguea automáticamente al usuario creado
-        login(usuarioCreado)
-        navigate("/usuario")
+        //login(usuarioCreado
+        console.log(  "Usuario creado con éxito")
+        setTieneUsuario(true) 
+        navigate("/login")
       })
       .catch((err: any) => {
         setError(err.message)
