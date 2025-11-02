@@ -10,7 +10,7 @@ export type Post = {
     createdAt?: Date
     userId?: number
     Tags?: Tag[]
-    Post_Images?: Post_Image[]
+    Post_images?: Post_image[]
     Comments?: Comment[]
 }
 
@@ -22,7 +22,7 @@ export type Comment = {
     postId?: number
 }
 
-export type Post_Image = {
+export type Post_image = {
     id?: number
     url: string
     postId?: number
