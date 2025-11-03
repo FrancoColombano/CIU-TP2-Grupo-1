@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { Usuario } from "../types/tipos"
 
 // 1) Tipar el contexto (no dejarlo sin tipo)

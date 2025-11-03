@@ -1,11 +1,11 @@
 export type Usuario = {
-    id?: number
+    id: number
     nickName: string
     email?: string
 }
 
 export type Post = {
-    id?: number
+    id: number
     texto: string
     createdAt?: Date
     userId?: number

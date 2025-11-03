@@ -2,13 +2,14 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthProvider"
 import type { Post, Usuario } from "../types/tipos"
 import { Button, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
-
+import { Navigate, useNavigate } from "react-router-dom"
 
 export default function Home() {
   const { usuario } = useAuth()
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
   const [error, setError] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     document.title = "Anti-Social | Inicio"
@@ -40,6 +41,12 @@ export default function Home() {
     return usuarioEncontrado ? usuarioEncontrado.nickName : "Usuario inexistente"
   }
 
+  function manejarClickPost(id: number): void {
+    if (id) {
+      navigate(`/post/${id}`)
+    }
+  }
+
   return (
     <div>
       <Container className="my-3" >
@@ -47,7 +54,7 @@ export default function Home() {
         <Row>
           {posts.map((post) => (
             <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">
-              <Card style={{ width: '100%' }}>
+              <Card style={{ width: '100%', cursor: 'pointer'}} onClick={() => manejarClickPost(post.id)}>
                 <Card.Body>
                   <Card.Title>{nombreUsuario(post.userId)}</Card.Title>
                   <Card.Text>
