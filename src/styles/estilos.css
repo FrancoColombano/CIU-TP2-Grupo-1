@@ -1,9 +1,9 @@
 /* Layout de 3 columnas para desktop */
 .app-container {
   display: grid;
-  grid-template-columns: 275px 1fr 350px; /* izquierda | centro | derecha */
+  grid-template-columns: 350px 1fr 350px; /* izquierda | centro | derecha */
   min-height: 100vh;
-  max-width: 1280px; /* ancho máximo del layout */
+  max-width: 1440px; /* ancho máximo del layout */
   margin: 0 auto; /* centrar todo */
 }
 
@@ -11,15 +11,17 @@
 .sidebar-left {
   position: sticky;
   top: 0;
+  left: 0;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 20px;
   border-right: 1px solid #e1e8ed;
+  background-color: black;
 }
 
 /* Contenido central - Ancho máximo controlado */
 .main-content {
-  max-width: 600px; /* ancho angosto tipo Twitter */
+  max-width: 600px; /* ancho angosto tipo Twitter */  
   width: 100%;
   border-right: 1px solid #e1e8ed;
   min-height: 100vh;
@@ -27,11 +29,12 @@
 
 /* Sidebar derecha - Footer/Widgets */
 .sidebar-right {
-  position: sticky;
+  position: relative;
   top: 0;
   height: 100vh;
   overflow-y: auto;
   padding: 20px;
+  
 }
 
 /* Responsive: Mobile */
