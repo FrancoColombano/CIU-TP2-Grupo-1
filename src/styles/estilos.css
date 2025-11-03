@@ -21,7 +21,7 @@
 
 /* Contenido central - Ancho máximo controlado */
 .main-content {
-  max-width: 600px; /* ancho angosto tipo Twitter */
+  max-width: 600px; /* ancho angosto tipo Twitter */  
   width: 100%;
   border-right: 1px solid #e1e8ed;
   min-height: 100vh;
