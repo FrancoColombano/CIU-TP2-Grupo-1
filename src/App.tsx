@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../src/styles/estilos.css"
-import Header from "./components/Header"
+import NavBar from "./components/NavBar"
 import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
@@ -16,12 +16,12 @@ function App() {
     <AuthProvider>
       <div className="app-container">
         {/* Columna izquierda - Navegación */}
-        <aside className="sidebar-left">
-          <Header />
+        <aside className="sidenav">
+          <NavBar />
         </aside>
-
+        <div className="spacer-left"></div>
         {/* Columna central - Contenido principal */}
-        <main className="main-content">
+        <main className="content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -32,10 +32,9 @@ function App() {
         </main>
 
         {/* Columna derecha - Footer/Widgets */}
-        <aside className="sidebar-right">
-          <Footer />
-        </aside>
+        <div className="spacer-right"></div>
       </div>
+      
 
     </AuthProvider>
   )

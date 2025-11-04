@@ -1,81 +1,131 @@
-/* Layout de 3 columnas para desktop */
+/* --- Reset básico --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Layout principal en pantalla grande --- */
 .app-container {
-  display: grid;
-  grid-template-columns: 350px 1fr 350px; /* izquierda | centro | derecha */
-  min-height: 100vh;
-  max-width: 1440px; /* ancho máximo del layout */
-  margin: 0 auto; /* centrar todo */
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    font-family: sans-serif;
 }
 
-/* Sidebar izquierda - Navegación */
-.sidebar-left {
-  position: sticky;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  overflow-y: hidden;
-  padding: 20px;
-  border-right: 1px solid #e1e8ed;
-  background-color: black;
+/* Sidenav izquierda - ANCHO FIJO 60px */
+.sidenav {
+    width: 60px;
+    flex: 0 0 60px;
+    background-color: #222;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 1rem;
 }
 
-/* Contenido central - Ancho máximo controlado */
-.main-content {
-  max-width: 600px; /* ancho angosto tipo Twitter */  
-  width: 100%;
-  border-right: 1px solid #e1e8ed;
-  min-height: 100vh;
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-/* Sidebar derecha - Footer/Widgets */
-.sidebar-right {
-  position: relative;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  padding: 20px;
-  
-}
-
-/* Responsive: Mobile */
-@media (max-width: 1024px) {
-  .app-container {
-    grid-template-columns: 80px 1fr; /* solo nav + contenido */
-  }
-
-  .sidebar-right {
-    display: none; /* ocultar footer en tablets */
-  }
-
-  .sidebar-left {
-    padding: 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-container {
-    grid-template-columns: 1fr; /* solo contenido en móvil */
-  }
-
-  .sidebar-left {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: auto;
-    width: 100%;
-    border-right: none;
-    border-top: 1px solid #e1e8ed;
-    z-index: 1000;
-  }
-
-  .sidebar-right {
+.nav-text {
     display: none;
-  }
+    /* ocultar texto por defecto en 60px */
+}
 
-  .main-content {
-    max-width: 100%;
-    border: none;
-    padding-bottom: 70px; /* espacio para nav fijo inferior */
-  }
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Espaciadores laterales - crecen/achican para centrar el content */
+.spacer-left,
+.spacer-right {
+    flex: 1 1 auto;
+    background-color: #fff;
+}
+
+/* Parte central - ANCHO FIJO 640px CENTRADO */
+.content {
+    width: 640px;
+    flex: 0 0 640px;
+    background-color: #f4f4f4;
+    overflow-y: auto;
+    padding: 1rem; /* Agregar padding para que no esté pegado */
+    height: 100vh; /* Altura completa de la ventana */
+}
+
+/* animar cambios de tamaño para que se vea suave */
+.sidenav,
+.content,
+.spacer-left,
+.spacer-right {
+    transition: all 260ms ease;
+}
+
+/* 🔹 Desktop: mayor a 699px - Nav en COLUMNA */
+.navcito {
+    display: flex;
+    flex-direction: column;
+}
+
+.navcito .navbar {
+    flex-direction: column;
+}
+
+.navcito .navbar-nav {
+    flex-direction: column !important;
+}
+
+/* 🔹 Modo teléfono: menor o igual a 699px - Nav en FILA */
+@media (max-width: 699px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidenav {
+        order: 2;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        height: 50px;
+        flex: 0 0 50px;
+        padding: 0.5rem;
+    }
+
+    .nav-item {
+        flex-direction: row;
+    }
+
+    .content {
+        order: 1;
+        width: 100%;
+        flex: 1 1 auto;
+        height: calc(100vh - 50px);
+        padding: 1rem;
+    }
+
+    .spacer-left,
+    .spacer-right {
+        display: none;
+    }
+
+    /* Nav en fila para móvil */
+    .navcito {
+        flex-direction: row;
+    }
+
+    .navcito .navbar {
+        flex-direction: row;
+    }
+
+    .navcito .navbar-nav {
+        flex-direction: row !important;
+    }
 }
