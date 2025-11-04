@@ -1,16 +1,16 @@
+import React from 'react'
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthProvider"
 import type { Post, Usuario } from "../types/tipos"
 import { Button, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
-import { Navigate, useNavigate } from "react-router-dom"
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
-export default function Home() {
-  const { usuario } = useAuth()
+export default function PostsTag() {
+const { usuario } = useAuth()
+const { id } = useParams()
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
   const [error, setError] = useState(null)
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    fetch("http://localhost:3000/post/")
+    fetch(`http://localhost:3000/tag/${id}/posts`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener los posts")
         return res.json()
@@ -49,10 +49,15 @@ export default function Home() {
     }
   }
 
+  function nombreTag(tagId: string | undefined): string {
+    const tags = posts.map((p) =>p.Tags).flat()
+    const tag = tags.find(t => t?.id === Number(tagId))
+    return tag ? tag.texto : "Tag desconocido"  
+  }
   return (
     <div>
       <Container className="my-3" >
-        <h2>Feed de Publicaciones</h2>
+        <h2>Posts con tag {nombreTag(id)}</h2>
         <Row>
           {posts.map((post) => (
             <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">

@@ -29,6 +29,6 @@ export type Post_image = {
 }
 
 export type Tag = {
-    id?: number
+    id: number
     texto: string
 }

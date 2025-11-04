@@ -6,6 +6,7 @@ import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Post from "./pages/Post"
+import PostsTag from "./pages/postsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/usuario" element={<PerfilUsuario />} />
             <Route path="/post/:id" element={<Post />} />
+            <Route path="/tag/:id/posts" element={<PostsTag />} />
           </Routes>
         </main>
 

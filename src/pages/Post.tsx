@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, type MouseEventHandler } from "react"
 import { Alert, Button, Card, CardFooter, Form, ListGroup } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
-import type { Post, Usuario } from "../types/tipos"
+import type { Post, Tag, Usuario } from "../types/tipos"
 import { useAuth } from "../context/AuthProvider"
 
 
@@ -73,6 +73,11 @@ export default function Post() {
     return usuarioEncontrado ? usuarioEncontrado.nickName : "Usuario inexistente"
   }
 
+  function manejarClickTag(id: number){
+    if (id)
+    navigate(`/tag/${id}/posts`)
+  }
+
   return (
     <Card>
       <Card.Body>
@@ -86,7 +91,7 @@ export default function Post() {
         {post?.Tags && post.Tags.length > 0 && (
           <div className="my-2">
             {post.Tags.map((tag) => (
-              <span key={tag.id} className="badge bg-secondary me-1">
+              <span key={tag.id} style={{cursor: 'pointer'}} className="badge bg-secondary me-1" onClick={()=>manejarClickTag(tag.id)}>
                 {tag.texto}
               </span>
             ))}
