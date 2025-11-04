@@ -6,7 +6,7 @@ import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Post from "./pages/Post"
-import PostsTag from "./pages/postsTag";
+import PostsTag from "./pages/PostsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
 

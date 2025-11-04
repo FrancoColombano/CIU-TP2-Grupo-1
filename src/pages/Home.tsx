@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react"
-import { useAuth } from "../context/AuthProvider"
 import type { Post, Usuario } from "../types/tipos"
-import { Button, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
-import { Navigate, useNavigate } from "react-router-dom"
-import { useSearchParams } from "react-router-dom";
+import { Alert, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
 
 export default function Home() {
-  const { usuario } = useAuth()
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
   const [error, setError] = useState(null)
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,7 +44,10 @@ export default function Home() {
       navigate(`/post/${id}`)
     }
   }
-
+  
+  if (error) {
+    return <Alert variant="danger">{error}</Alert>
+  }
   return (
     <div>
       <Container className="my-3" >

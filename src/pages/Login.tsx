@@ -108,9 +108,7 @@ export default function Login() {
         }
         return response.json()
       })
-      .then((usuarioCreado) => {
-        // Loguea automáticamente al usuario creado
-        //login(usuarioCreado
+      .then(() => {
         console.log(  "Usuario creado con éxito")
         setTieneUsuario(true) 
         navigate("/login")

@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState, type MouseEventHandler } from "react"
+import { useEffect, useState } from "react"
 import { Alert, Button, Card, CardFooter, Form, ListGroup } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
-import type { Post, Tag, Usuario } from "../types/tipos"
+import type { Post,Usuario } from "../types/tipos"
 import { useAuth } from "../context/AuthProvider"
 
 
@@ -50,12 +50,19 @@ export default function Post() {
         texto: comentarioTexto
       })
     })
-    .then(res => res.json())
+    .then((res) => {
+      if (!res.ok) throw new Error("Error al agregar el comentario")
+      return res.json()
+    })
     .then(() => {
       setComentarioTexto("") // Limpiar el textarea
       fetch(`http://localhost:3000/post/${id}`) // Recargar el post para ver el nuevo comentario
-        .then(res => res.json())
+        .then((res)=> { 
+          if (!res.ok) throw new Error("Error al obtener el post")
+          return res.json()
+        })
         .then(data => setPost(data))
+        .catch(err => setError(err.message))
     })
     .catch(err => setError(err.message))
   }
@@ -70,6 +77,9 @@ export default function Post() {
     navigate(`/tag/${id}/posts`)
   }
 
+  if (error) {
+    return <Alert variant="danger">{error}</Alert>
+  }
   return (
     <Card>
       <Card.Body>

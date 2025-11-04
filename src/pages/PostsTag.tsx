@@ -1,12 +1,9 @@
-import React from 'react'
 import { useEffect, useState } from "react"
-import { useAuth } from "../context/AuthProvider"
 import type { Post, Usuario } from "../types/tipos"
-import { Button, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
-import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { Alert, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router-dom"
 
 export default function PostsTag() {
-const { usuario } = useAuth()
 const { id } = useParams()
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
@@ -15,7 +12,6 @@ const { id } = useParams()
 
   useEffect(() => {
     document.title = "Anti-Social | Inicio"
-
   }, [])
 
   useEffect(() => {
@@ -31,7 +27,7 @@ const { id } = useParams()
   useEffect(() => {
     fetch(`http://localhost:3000/tag/${id}/posts`)
       .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener los posts")
+        if (!res.ok) throw new Error("Error al obtener los posts del tag")
         return res.json()
       })
       .then((data) => setPosts(data))
@@ -54,6 +50,11 @@ const { id } = useParams()
     const tag = tags.find(t => t?.id === Number(tagId))
     return tag ? tag.texto : "Tag desconocido"  
   }
+  
+  if (error) {
+    return <Alert variant="danger">{error}</Alert>
+  }
+
   return (
     <div>
       <Container className="my-3" >
