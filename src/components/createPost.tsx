@@ -1,31 +1,16 @@
 
-import { AuthContext } from "../context/AuthProvider";
-import { Button, Form, FormControl, Modal } from "react-bootstrap";
-import { useEffect, useState, useContext } from "react";
-
-
-type Tag = {
-    id: number;
-    texto: string;
-};
-
-type Image = {
-    id: number;
-    URL: string;
-};
-
-type Post = {
-    id: number;
-    texto: string;
-};
+import { useAuth } from "../context/AuthProvider";
+import { Button, Form, Modal } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import type { Post, Post_image, Tag } from "../types/tipos";
 
 export default function CreatePost() {
-    const { usuario } = useContext(AuthContext);
+    const { usuario } = useAuth();
 
     //Traido de la DB
     const [posts, setPost] = useState<Post[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
-    const [image, setImage] = useState<Image[]>([]);
+    const [image, setImage] = useState<Post_image[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     //Campos del form
@@ -62,7 +47,7 @@ export default function CreatePost() {
             .catch((e: any) => setError(e.message));
     }, []);
         
-    fetch(`http://localhost:3000/user/${usuario.id}/post`, { //Aregar ID a usuario
+    fetch(`http://localhost:3000/user/${usuario?.id}/post`, { //Aregar ID a usuario
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -86,7 +71,7 @@ export default function CreatePost() {
         event.preventDefault();
         const nuevoPost = {usuario, description, tag, imageURL };
 
-        fetch(`http://localhost:3000/user/${usuario.id}/post`, {
+        fetch(`http://localhost:3000/user/${usuario?.id}/post`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -112,7 +97,7 @@ export default function CreatePost() {
 return (
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-            <Modal.Title>{usuario.nickname}</Modal.Title>
+            <Modal.Title>{usuario?.nickName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form onSubmit={handleSubmit}>
@@ -124,7 +109,7 @@ return (
                     <Form.Select aria-label="Seleccionar una imagen">
                         <option>Seleccioná una URL de imagen</option>
                         {image.map((i) => (
-                            <option>{i.URL}</option>
+                            <option>{i.url}</option>
                         ))}
                         <Form.Control onChange={(e) => setImageURL(e.target.value)} />
                     </Form.Select>
@@ -142,7 +127,7 @@ return (
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={handleSubmit}>   
+            <Button variant="primary" onClick={() => handleSubmit}>
                 Crear Post
             </Button>
         </Modal.Footer>

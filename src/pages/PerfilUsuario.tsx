@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthProvider.tsx"
-import { Alert, Button, Form, Modal } from "react-bootstrap"
+import { Alert, Button, Card, CardFooter, Col, Container, Form, Modal, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import type { Usuario } from "../types/tipos.tsx"
+import type { Post, Usuario } from "../types/tipos.tsx"
 
 export default function PerfilUsuario() {
   const { usuario, logout } = useAuth()
@@ -13,14 +13,14 @@ export default function PerfilUsuario() {
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const [usuarios, setUsuarios] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
+  const [usuarios, setUsuarios] = useState<Usuario[]>([])
 
   useEffect(() => {
     document.title = `Anti-Social - Perfil ${usuario ? usuario.nickName : 'Usuario'}`
   }, [usuario])
 
   const navigate = useNavigate()
-
   // Cargar usuarios desde el backend al iniciar el componente
   useEffect(() => {
     fetch("http://localhost:3000/user/")
@@ -31,6 +31,17 @@ export default function PerfilUsuario() {
       .then((data) => setUsuarios(data))
       .catch((err) => setError(err.message))
   }, [])
+
+  useEffect(() => {
+    if(!usuario || !usuario.id) return
+    fetch(`http://localhost:3000/user/${usuario?.id}/post`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener los posts del usuario")
+        return res.json()
+      })
+      .then((data) => setPosts(data))
+      .catch((err) => setError(err.message))
+  }, [usuario])
 
   const [actualizarForm, setActualizarForm] = useState({
     email: usuario ? usuario.email : "",
@@ -83,6 +94,11 @@ export default function PerfilUsuario() {
       .catch((err) => setError(err.message))
   }
 
+  function manejarClickPost(id: number): void {
+    if (id) {
+      navigate(`/post/${id}`)
+    }
+  }
 
   if (!usuario) {
     return (
@@ -95,52 +111,80 @@ export default function PerfilUsuario() {
 
   return (
     <div>
-      <h1>Bienvenido {usuario.nickName}</h1>
-      <h2>Tus datos</h2>
-      <ul>
-        <li>
-          <strong>Email:</strong> {usuario.email}</li>
-        <li><strong>NickName:</strong> {usuario.nickName}</li>
-      </ul>
-      <Button variant="dark" onClick={handleShow}>Actualizar datos</Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar Datos</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={manejarSubmitActualizar}>
-            <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label>Nuevo Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Ingresa tu nuevo email"
-                name="email"
-                defaultValue={usuario.email}
-                value={actualizarForm.email}
-                onChange={manejarCambioActualizar}
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formNickName">
-              <Form.Label>Nuevo NickName</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Ingresa tu nuevo nickname"
-                name="nickName"
-                defaultValue={usuario.nickName}
-                value={actualizarForm.nickName}
-                onChange={manejarCambioActualizar}
-                pattern="^\S+$"
-                required />
-            </Form.Group>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Button variant="dark" type="submit">
-              Guardar Cambios
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <Container>
+        <h1>Bienvenido {usuario.nickName}</h1>
+        <h2>Tus datos</h2>
+        <ul>
+          <li>
+            <strong>Email:</strong> {usuario.email}</li>
+          <li><strong>NickName:</strong> {usuario.nickName}</li>
+        </ul>
+        <Button variant="dark" onClick={handleShow}>Actualizar datos</Button>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Actualizar Datos</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={manejarSubmitActualizar}>
+              <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Label>Nuevo Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Ingresa tu nuevo email"
+                  name="email"
+                  defaultValue={usuario.email}
+                  value={actualizarForm.email}
+                  onChange={manejarCambioActualizar}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formNickName">
+                <Form.Label>Nuevo NickName</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingresa tu nuevo nickname"
+                  name="nickName"
+                  defaultValue={usuario.nickName}
+                  value={actualizarForm.nickName}
+                  onChange={manejarCambioActualizar}
+                  pattern="^\S+$"
+                  required />
+              </Form.Group>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Button variant="dark" type="submit">
+                Guardar Cambios
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
 
-      <h2 className="mt-4">Tus publicaciones</h2>
+        <h2 className="mt-4">Tus publicaciones</h2>
+        <Row>
+          {posts.map((post) => (
+            <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">
+              <Card style={{ width: '100%', cursor: 'pointer' }} onClick={() => manejarClickPost(post.id)}>
+                <Card.Body>
+                  <Card.Title>{usuario.nickName}</Card.Title>
+                  <Card.Text>
+                    {post.texto}
+                  </Card.Text>
+                  {post.Post_images && post.Post_images.length > 0 &&
+                    post.Post_images.map((img) => (
+                      <Card.Img
+                        key={img.id}
+                        variant="bottom"
+                        src={img.url}
+                        className="my-2"
+                      />
+                    ))
+                  }
+                  <CardFooter className="text-muted">
+                      Publicado el {post.createdAt ? new Date(post.createdAt).toLocaleString() : "Fecha desconocida"}
+                  </CardFooter>
+                </Card.Body>
+              </Card>
+            </Col>))}
+        </Row>
+      </Container>
     </div>
   )
 }
