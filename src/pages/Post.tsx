@@ -18,15 +18,6 @@ export default function Post() {
     document.title = "Anti-Social | Crear Post"
   }, [])
 
-  if (!usuario) {
-    return (
-      <Alert variant="warning" className="mt-3">
-        <p>Acceso restringido. Por favor, inicia sesión para crear un post.</p>
-        <Button onClick={() => navigate("/login")} variant="dark">Iniciar sesión</Button>
-      </Alert>
-    )
-  }
-
   useEffect(() => {
     fetch(`http://localhost:3000/post/${id}`)
       .then((res) => {
@@ -48,8 +39,9 @@ export default function Post() {
   }, [])
 
   const manejarSubmitComment = (e: React.FormEvent) => {
+    if (!usuario) return navigate('/login')
     e.preventDefault()
-    console.log(usuario.id)
+    console.log(usuario?.id)
     if (!comentarioTexto.trim()) return
     fetch(`http://localhost:3000/user/${usuario.id}/post/${post?.id}/comment`, {
       method: 'POST',
@@ -106,13 +98,14 @@ export default function Post() {
             <Form.Control
               as="textarea"
               rows={2}
-              placeholder="Escribí tu comentario..."
+              placeholder={usuario ? "Escribí tu comentario..." : "Debes iniciar sesión para comentar"}
               value={comentarioTexto}
               onChange={(e) => setComentarioTexto(e.target.value)}
+              disabled={!usuario}
             />
           </Form.Group>
           <Button variant="primary" type="submit" className="mt-2">
-            Comentar
+            {usuario ? "Comentar" : "Iniciar sesión"}
           </Button>
         </Form>
         {post?.Comments && post.Comments.length > 0 && (
