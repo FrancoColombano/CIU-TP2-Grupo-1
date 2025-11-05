@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthProvider.tsx"
 import { Alert, Button, Card, CardFooter, Col, Container, Form, Modal, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import type { Post, Usuario } from "../types/tipos.tsx"
+import "../styles/perfilUsuario.css"
+
 
 export default function PerfilUsuario() {
   const { usuario, logout } = useAuth()
@@ -112,14 +114,14 @@ export default function PerfilUsuario() {
   return (
     <div>
       <Container>
-        <h1>Bienvenido {usuario.nickName}</h1>
-        <h2>Tus datos</h2>
-        <ul>
+        <h1 text-center mt-4 mb-3 fw-bold text-primary>Bienvenido {usuario.nickName}</h1>
+        <h2 className="fw-semibold text-secondary mb-3">Tus datos</h2>
+        <ul className="mb-4">
           <li>
             <strong>Email:</strong> {usuario.email}</li>
           <li><strong>NickName:</strong> {usuario.nickName}</li>
         </ul>
-        <Button variant="dark" onClick={handleShow}>Actualizar datos</Button>
+        <Button variant="dark" className="mb-4" onClick={handleShow}>Actualizar datos</Button>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Actualizar Datos</Modal.Title>
@@ -157,7 +159,7 @@ export default function PerfilUsuario() {
           </Modal.Body>
         </Modal>
 
-        <h2 className="mt-4">Tus publicaciones</h2>
+        <h2 className="fw-semibold text-secondary mt-5 mb-3">Tus publicaciones</h2>
         <Row>
           {posts.map((post) => (
             <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">

@@ -1,0 +1,83 @@
+body {
+  background-color: #f4f8fb;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: #0a2342;
+}
+
+/* --- ENCABEZADO --- */
+h1 {
+  background-color: #0a2342;
+  color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* --- SECCIONES --- */
+h2 {
+  color: #123c68;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li strong {
+  color: #0a2342;
+}
+
+/* --- BOTONES --- */
+button.btn-dark {
+  background-color: #0a2342;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+button.btn-dark:hover {
+  background-color: #1b4f91;
+  transform: translateY(-2px);
+}
+
+/* --- TARJETAS DE PUBLICACIONES --- */
+.card {
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-weight: 700;
+  color: #0a2342;
+}
+
+.card-footer {
+  background-color: #f1f5f9;
+  font-size: 0.9rem;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+}
+
+/* --- MODAL --- */
+.modal-content {
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+form label {
+  font-weight: 600;
+  color: #0a2342;
+}
