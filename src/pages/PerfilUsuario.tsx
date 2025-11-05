@@ -114,7 +114,7 @@ export default function PerfilUsuario() {
   return (
     <div>
       <Container>
-        <h1 text-center mt-4 mb-3 fw-bold text-primary>Bienvenido {usuario.nickName}</h1>
+        <h1>Bienvenido {usuario.nickName}</h1>
         <h2 className="fw-semibold text-secondary mb-3">Tus datos</h2>
         <ul className="mb-4">
           <li>

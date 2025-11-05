@@ -90,6 +90,30 @@
     flex-direction: column !important;
 }
 
+.floating-button {
+  position: fixed;
+  right: 20px;
+  bottom: 60px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: black; /* color bootstrap primary */
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  z-index: 1050;
+}
+
+.floating-button:active { transform: scale(0.98); }
+
+.floating-button:focus { outline: none; box-shadow: 0 0 0 4px rgba(13,110,253,0.18); }
+
 /* 🔹 Modo teléfono: menor o igual a 699px - Nav en FILA */
 @media (max-width: 699px) {
     .app-container {

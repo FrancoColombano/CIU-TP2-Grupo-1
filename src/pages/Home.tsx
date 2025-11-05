@@ -11,7 +11,6 @@ export default function Home() {
 
   useEffect(() => {
     document.title = "Anti-Social | Inicio"
-
   }, [])
 
   useEffect(() => {
@@ -30,9 +29,9 @@ export default function Home() {
         if (!res.ok) throw new Error("Error al obtener los posts")
         return res.json()
       })
-      .then((data) => setPosts(data))
+      .then((data) => setPosts(data.reverse()))
       .catch((err) => setError(err.message))
-  }, [])
+  }, [posts])
 
   function nombreUsuario(userId: number | undefined): string {
     const usuarioEncontrado = usuarios.find((u) => u.id === userId)

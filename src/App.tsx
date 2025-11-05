@@ -8,11 +8,11 @@ import Post from "./pages/Post"
 import PostsTag from "./pages/PostsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
-
+import CreatePost from "./components/createPost";
 function App() {
-
   return (
     <AuthProvider>
+      <CreatePost />
       <div className="app-container">
         {/* Columna izquierda - Navegación */}
         <aside className="sidenav">
@@ -29,7 +29,6 @@ function App() {
             <Route path="/tag/:id/posts" element={<PostsTag />} />
           </Routes>
         </main>
-
         {/* Columna derecha - Footer/Widgets */}
         <div className="spacer-right"></div>
 
@@ -37,8 +36,6 @@ function App() {
           <img src="./LogoRedSocialOscuro.png" alt="Logo" style={{ width: '50px', display: 'flex' }} />
         </div>
       </div>
-      
-
     </AuthProvider>
   )
 }
