@@ -16,15 +16,16 @@
 
 /* Sidenav izquierda - ANCHO FIJO 60px */
 .sidenav {
-    width: 60px;
+    width: 60px; 
     flex: 0 0 60px;
-    background-color: #222;
+    background-color: black;
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem 0;
     gap: 1rem;
+    justify-content: space-around
 }
 
 .nav-item {
@@ -51,6 +52,10 @@
     background-color: #fff;
 }
 
+.spacer-top{
+    display: none;
+}
+
 /* Parte central - ANCHO FIJO 640px CENTRADO */
 .content {
     width: 640px;
@@ -73,6 +78,8 @@
 .navcito {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 }
 
 .navcito .navbar {
@@ -116,9 +123,18 @@
         display: none;
     }
 
+    .spacer-top {
+        display: block;
+        height: 50px;
+        justify-items: center;
+        background-color: black;
+    }
+
     /* Nav en fila para móvil */
     .navcito {
         flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
     }
 
     .navcito .navbar {
@@ -127,5 +143,8 @@
 
     .navcito .navbar-nav {
         flex-direction: row !important;
+    }
+    .nav-logo {
+        display: none;
     }
 }

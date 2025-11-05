@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../src/styles/estilos.css"
 import NavBar from "./components/NavBar"
-import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Post from "./pages/Post"
@@ -33,6 +32,10 @@ function App() {
 
         {/* Columna derecha - Footer/Widgets */}
         <div className="spacer-right"></div>
+
+        <div className="spacer-top">
+          <img src="./LogoRedSocialOscuro.png" alt="Logo" style={{ width: '50px', display: 'flex' }} />
+        </div>
       </div>
       
 
