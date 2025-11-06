@@ -8,7 +8,7 @@ import Post from "./pages/Post"
 import PostsTag from "./pages/PostsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
-import CreatePost from "./components/CreatePost";
+import CreatePost from "./components/createPost";
 import { useState } from "react";
 function App() {
   const [recargarPagina, setRecargarPagina] = useState(0)

@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-function ColorSchemesExample() {
+function NavBar() {
     const { logout, usuario } = useAuth();
 
     return (
@@ -39,4 +39,4 @@ function ColorSchemesExample() {
     );
 }
 
-export default ColorSchemesExample;
+export default NavBar;

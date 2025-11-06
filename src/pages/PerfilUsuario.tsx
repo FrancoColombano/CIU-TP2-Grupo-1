@@ -25,6 +25,20 @@ export default function PerfilUsuario() {
     document.title = `Anti-Social - Perfil ${usuario ? usuario.nickName : 'Usuario'}`
   }, [usuario])
 
+  if (!usuario) {
+    return (
+      <Container className="my-5">
+        <Alert variant="warning">
+          <Alert.Heading>Acceso restringido</Alert.Heading>
+          <p>Debes iniciar sesión para ver tu perfil.</p>
+          <Button onClick={() => navigate("/login")} variant="primary">
+            Iniciar sesión
+          </Button>
+        </Alert>
+      </Container>
+    )
+  }
+  
   useEffect(() => {
     fetch("http://localhost:3000/user/")
       .then((res) => {
@@ -101,19 +115,8 @@ export default function PerfilUsuario() {
     }
   }
 
-  if (!usuario) {
-    return (
-      <Container className="my-5">
-        <Alert variant="warning">
-          <Alert.Heading>Acceso restringido</Alert.Heading>
-          <p>Debes iniciar sesión para ver tu perfil.</p>
-          <Button onClick={() => navigate("/login")} variant="primary">
-            Iniciar sesión
-          </Button>
-        </Alert>
-      </Container>
-    )
-  }
+
+
   const eliminarPost = (id: number): void => {
 
     fetch(`http://localhost:3000/post/${id}`, {

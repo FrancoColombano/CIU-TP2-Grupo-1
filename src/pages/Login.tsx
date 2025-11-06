@@ -128,7 +128,7 @@ export default function Login() {
     return <Navigate to="/usuario" />
   }
 
-  if (tieneUsuario) { // si el usuario ya tiene cuenta, muestra el formulario de login
+  if (tieneUsuario) { //Si tieneUsuario es true muestro iniciar sesion
     return (
       <Card style={{ width: '18rem' }} className="container">
         <Card.Body>
@@ -172,7 +172,7 @@ export default function Login() {
       </Card>
     )
   }
-
+  //Si tieneUsuario es falso muestro el register
   return (
     <Card style={{ width: '18rem' }} className="container">
       <Card.Body>

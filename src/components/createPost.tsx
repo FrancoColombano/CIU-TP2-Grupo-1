@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthProvider";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import type { Post, Post_image, Tag} from "../types/tipos";
 import { useNavigate } from "react-router-dom"
@@ -39,7 +39,6 @@ export default function CreatePost({setRecargarPagina}: RecargarPagina) {
                 return res.json();
             })
             .then((data) => setTags(data))
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .catch((e: any) => setError(e.message));
     }, []);
 
@@ -50,7 +49,6 @@ export default function CreatePost({setRecargarPagina}: RecargarPagina) {
                 return res.json();
             })
             .then((data) => setImages(data))
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .catch((e: any) => setError(e.message));
     }, []);
 
@@ -103,6 +101,9 @@ export default function CreatePost({setRecargarPagina}: RecargarPagina) {
                 console.error(e);
                 setError(e.message);
             });
+        if (error){
+            <Alert variant="danger">{error}</Alert>
+        }
     }
 
     function retornarTag(texto: string): Tag | null {
