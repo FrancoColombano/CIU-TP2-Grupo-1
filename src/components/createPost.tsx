@@ -1,10 +1,14 @@
 import { useAuth } from "../context/AuthProvider";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import type { Post, Post_image, Tag } from "../types/tipos";
+import type { Post, Post_image, Tag} from "../types/tipos";
 import { useNavigate } from "react-router-dom"
 
-export default function CreatePost() {
+interface RecargarPagina { 
+    setRecargarPagina: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function CreatePost({setRecargarPagina}: RecargarPagina) {
     const { usuario } = useAuth();
     const navigate = useNavigate()
     //Traido de la DB
@@ -17,9 +21,6 @@ export default function CreatePost() {
     const [description, setDescription] = useState("");
     const [image, setImage] = useState<Post_image | null>(null);
     const [tag, setTag] = useState<Tag | null>(null);
-
-    //Post creado
-    const [nuevoPost, setNuevoPost] = useState<Post | null>(null);
 
     //Modal
     const [show, setShow] = useState(false);
@@ -94,6 +95,7 @@ export default function CreatePost() {
                 setDescription("");
                 setImage(null);
                 setTag(null);
+                setRecargarPagina(prev => prev + 1) //Hace que cambie el valor para que vuelva a correr el useEffect en HOME
                 handleClose();
                 navigate("/")
             })

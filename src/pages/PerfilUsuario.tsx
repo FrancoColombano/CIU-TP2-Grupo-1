@@ -44,7 +44,7 @@ export default function PerfilUsuario() {
       })
       .then((data) => setPosts(data))
       .catch((err) => setError(err.message))
-  }, [posts])
+  }, [])
 
   const [actualizarForm, setActualizarForm] = useState({
     email: usuario ? usuario.email : "",
@@ -125,7 +125,7 @@ export default function PerfilUsuario() {
         return response.json()
       })
       .then(() => {
-        
+        setPosts(postsActuales => postsActuales.filter(p => p.id !== id)) //eliminamos el post eliminado de la lista de posts local
       })
       .catch((err) => setError(err.message))
   }

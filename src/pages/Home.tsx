@@ -3,7 +3,7 @@ import type { Post, Usuario } from "../types/tipos"
 import { Alert, Card, Col, Container, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-export default function Home() {
+export default function Home({recargarPagina}: {recargarPagina: Number}) {
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([]) 
   const [error, setError] = useState(null)
@@ -32,7 +32,7 @@ export default function Home() {
       })
       .then((data) => setPosts(data))
       .catch((err) => setError(err.message))
-  }, [posts])
+  }, [recargarPagina]) 
 
   function nombreUsuario(userId: number | undefined): string {
     const usuarioEncontrado = usuarios.find((u) => u.id === userId)

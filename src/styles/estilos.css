@@ -185,10 +185,6 @@ a.nav-item:focus-visible {
   box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.3); 
 }
 
-/* ============================================
-   BOOTSTRAP OVERRIDES - TEMA OSCURO
-   ============================================ */
-
 /* Cards */
 .card {
   border-radius: 16px;
@@ -422,9 +418,7 @@ h2 {
   background: var(--border-hover);
 }
 
-/* ============================================
-   PERFIL DE USUARIO
-   ============================================ */
+/*PERFIL DE USUARIO*/
 .profile-header {
   text-align: center;
   padding: 2rem 0 1.5rem;
@@ -492,9 +486,7 @@ h2 {
   color: red;
 }
 
-/* ============================================
-   RESPONSIVE - MODO MÓVIL
-   ============================================ */
+/*RESPONSIVE - MODO MÓVIL */
 @media (max-width: 699px) {
     .app-container {
         flex-direction: column;

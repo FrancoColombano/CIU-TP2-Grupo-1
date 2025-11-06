@@ -9,10 +9,12 @@ import PostsTag from "./pages/PostsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
 import CreatePost from "./components/CreatePost";
+import { useState } from "react";
 function App() {
+  const [recargarPagina, setRecargarPagina] = useState(0)
   return (
     <AuthProvider>
-      <CreatePost />
+      <CreatePost setRecargarPagina = {setRecargarPagina}/>
       <div className="app-container">
         {/* Columna izquierda - Navegación */}
         <aside className="sidenav">
@@ -22,7 +24,7 @@ function App() {
         {/* Columna central - Contenido principal */}
         <main className="content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home recargarPagina = {recargarPagina}/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/usuario" element={<PerfilUsuario />} />
             <Route path="/post/:id" element={<Post />} />
