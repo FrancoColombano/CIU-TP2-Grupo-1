@@ -31,7 +31,7 @@
 Asegúrate de tener instalado en tu sistema:
 
 - **Node.js**
-- **npm** o **yarn**
+- **npm**
 - **Backend de la aplicación** corriendo (API REST del TP de Backend)
 
 ### Instalación
@@ -39,7 +39,7 @@ Asegúrate de tener instalado en tu sistema:
 1. **Clonar el repositorio**
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/EP-UnaHur-2025C2/anti-social-relational-grupo-1-com-2.git
 cd unahur-antisocial-net
 ```
 
@@ -47,12 +47,6 @@ cd unahur-antisocial-net
 
 ```bash
 npm install
-```
-
-O si usas yarn:
-
-```bash
-yarn install
 ```
 
 3. **Configurar variables de entorno**
@@ -77,12 +71,6 @@ Verifica que la API esté activa en el puerto configurado (por defecto: `http://
 npm start
 ```
 
-O con yarn:
-
-```bash
-yarn start
-```
-
 3. **Acceder a la aplicación**
 
 Abre tu navegador en [http://localhost:3000](http://localhost:3000)
@@ -91,33 +79,6 @@ Abre tu navegador en [http://localhost:3000](http://localhost:3000)
 
 - **Contraseña universal**: `123456`
 - **Usuario de prueba**: Utiliza cualquier nickname existente en la base de datos
-
----
-
-## Estructura del Proyecto
-
-```
-src/
-├── components/         # Componentes reutilizables
-├── contexts/          # Context API (AuthContext)
-├── pages/             # Páginas principales de la aplicación
-├── services/          # Servicios para comunicación con la API
-└── App.js             # Componente principal
-```
-
----
-
-## Rutas de la Aplicación
-
-| Ruta | Descripción | Protegida |
-|------|-------------|-----------|
-| `/` | Página de inicio con feed de publicaciones | No |
-| `/login` | Inicio de sesión o Registro de usuario| No |
-| `/post/:id` | Detalle de una publicación | No |
-| `/usuario` | Perfil del usuario logueado | Sí |
-| `/post` | Crear nueva publicación | Sí |
-
----
 
 ## Funcionalidades Detalladas
 
@@ -131,12 +92,11 @@ src/
 - Formulario con validación de campos obligatorios
 - Verificación de nickname único en el backend
 - Manejo de errores del servidor
-- Redirección automática tras registro exitoso
+- Redirección automática a login tras registro exitoso
 
 ### Feed de Publicaciones
 - Carga de posts recientes
 - Visualización de imágenes y etiquetas
-- Contador de comentarios visibles
 - Navegación a detalle de publicación
 
 ### Sistema de Comentarios
@@ -147,7 +107,6 @@ src/
 ### Gestión de Publicaciones
 - Creación de posts con descripción, imágenes y etiquetas
 - Carga de etiquetas desde la API
-- Soporte para múltiples URLs de imágenes
 - Asociación automática de imágenes con posts
 
 ---

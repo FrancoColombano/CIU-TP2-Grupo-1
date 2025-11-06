@@ -1,29 +1,30 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../context/AuthProvider.tsx"
-import { Alert, Button, Card, CardFooter, Col, Container, Form, Modal, Row } from "react-bootstrap"
+import { Alert, Button, Card, Col, Container, Form, Modal, ModalBody, ModalTitle, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import type { Post, Usuario } from "../types/tipos.tsx"
-import "../styles/perfilUsuario.css"
-
+import "../styles/estilos.css"
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function PerfilUsuario() {
   const { usuario, logout } = useAuth()
   const [error, setError] = useState("")
-
-  const [show, setShow] = useState(false)
-
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-
   const [posts, setPosts] = useState<Post[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
+  const navigate = useNavigate()
+  /*Comportamiento modal editar usuario*/
+  const [showUpdateUsuario, setShowUpdateUsuario] = useState(false)
+  const handleCloseUpdateUsuario = () => setShowUpdateUsuario(false)
+  const handleShowUpdateUsuario = () => setShowUpdateUsuario(true)
+  /*Comportamiento modal eliminar post*/
+  const [showEliminarPost, setShowEliminarPost] = useState(false)
+  const handleCloseEliminarPost = () => setShowEliminarPost(false)
+  const handleShowEliminarPost = () => setShowEliminarPost(true)
 
   useEffect(() => {
     document.title = `Anti-Social - Perfil ${usuario ? usuario.nickName : 'Usuario'}`
   }, [usuario])
 
-  const navigate = useNavigate()
-  // Cargar usuarios desde el backend al iniciar el componente
   useEffect(() => {
     fetch("http://localhost:3000/user/")
       .then((res) => {
@@ -35,15 +36,15 @@ export default function PerfilUsuario() {
   }, [])
 
   useEffect(() => {
-    if(!usuario || !usuario.id) return
-    fetch(`http://localhost:3000/user/${usuario?.id}/post`)
+    if (!usuario || !usuario.id) return
+    fetch(`http://localhost:3000/user/${usuario.id}/post`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener los posts del usuario")
         return res.json()
       })
       .then((data) => setPosts(data))
       .catch((err) => setError(err.message))
-  }, [usuario])
+  }, [posts])
 
   const [actualizarForm, setActualizarForm] = useState({
     email: usuario ? usuario.email : "",
@@ -78,9 +79,7 @@ export default function PerfilUsuario() {
 
     fetch(`http://localhost:3000/user/${usuario?.id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(actualizarForm)
     })
       .then((response) => {
@@ -89,14 +88,14 @@ export default function PerfilUsuario() {
       })
       .then(() => {
         alert("Datos actualizados correctamente. Por favor, vuelve a iniciar sesión.")
-        handleClose()
+        handleCloseUpdateUsuario()
         logout()
         navigate("/login")
       })
       .catch((err) => setError(err.message))
   }
 
-  function manejarClickPost(id: number): void {
+  function manejarClickPost(id: number | undefined): void {
     if (id) {
       navigate(`/post/${id}`)
     }
@@ -104,89 +103,205 @@ export default function PerfilUsuario() {
 
   if (!usuario) {
     return (
-      <Alert variant="warning" className="mt-3">
-        <p>Acceso restringido. Inicie sesión para ver su perfil.</p>
-        <Button onClick={() => navigate("/login")} variant="dark">Iniciar sesión</Button>
-      </Alert>
+      <Container className="my-5">
+        <Alert variant="warning">
+          <Alert.Heading>Acceso restringido</Alert.Heading>
+          <p>Debes iniciar sesión para ver tu perfil.</p>
+          <Button onClick={() => navigate("/login")} variant="primary">
+            Iniciar sesión
+          </Button>
+        </Alert>
+      </Container>
     )
+  }
+  const eliminarPost = (id: number): void => {
+
+    fetch(`http://localhost:3000/post/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Error al eliminar post")
+        return response.json()
+      })
+      .then(() => {
+        
+      })
+      .catch((err) => setError(err.message))
   }
 
   return (
-    <div>
-      <Container>
-        <h1>Bienvenido {usuario.nickName}</h1>
-        <h2 className="fw-semibold text-secondary mb-3">Tus datos</h2>
-        <ul className="mb-4">
-          <li>
-            <strong>Email:</strong> {usuario.email}</li>
-          <li><strong>NickName:</strong> {usuario.nickName}</li>
-        </ul>
-        <Button variant="dark" className="mb-4" onClick={handleShow}>Actualizar datos</Button>
-        <Modal show={show} onHide={handleClose}>
+    <Container className="my-4">
+      {/* Header del perfil */}
+      <div className="profile-header">
+        <div className="profile-avatar">
+          <span style={{ fontSize: '2.5rem' }}>👤</span>
+        </div>
+        <h1 className="mb-2">@{usuario.nickName}</h1>
+        <p className="text-muted mb-3">{usuario.email}</p>
+        <Button variant="primary" size="sm" onClick={handleShowUpdateUsuario}>
+          Editar perfil
+        </Button>
+      </div>
+
+      {/* Stats */}
+      <Card className="mb-4">
+        <Card.Body className="py-3">
+          <Row className="text-center">
+            <Col xs={4} className="border-end">
+              <h3 style={{ color: 'var(--accent-blue)', marginBottom: '0.25rem' }}>
+                {posts.length}
+              </h3>
+              <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Posts</p>
+            </Col>
+            <Col xs={4} className="border-end">
+              <h3 style={{ color: 'var(--accent-blue)', marginBottom: '0.25rem' }}>0</h3>
+              <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Seguidores</p>
+            </Col>
+            <Col xs={4}>
+              <h3 style={{ color: 'var(--accent-blue)', marginBottom: '0.25rem' }}>0</h3>
+              <p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Siguiendo</p>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+
+      {/* Modal de edición */}
+      <Modal show={showUpdateUsuario} onHide={handleCloseUpdateUsuario}>
+        <Form onSubmit={manejarSubmitActualizar}>
           <Modal.Header closeButton>
-            <Modal.Title>Actualizar Datos</Modal.Title>
+            <Modal.Title>Editar perfil</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={manejarSubmitActualizar}>
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>Nuevo Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Ingresa tu nuevo email"
-                  name="email"
-                  defaultValue={usuario.email}
-                  value={actualizarForm.email}
-                  onChange={manejarCambioActualizar}
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formNickName">
-                <Form.Label>Nuevo NickName</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Ingresa tu nuevo nickname"
-                  name="nickName"
-                  defaultValue={usuario.nickName}
-                  value={actualizarForm.nickName}
-                  onChange={manejarCambioActualizar}
-                  pattern="^\S+$"
-                  required />
-              </Form.Group>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Button variant="dark" type="submit">
-                Guardar Cambios
-              </Button>
-            </Form>
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Ingresa tu email"
+                name="email"
+                value={actualizarForm.email}
+                onChange={manejarCambioActualizar}
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formNickName">
+              <Form.Label>Nombre de usuario</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingresa tu nickname"
+                name="nickName"
+                value={actualizarForm.nickName}
+                onChange={manejarCambioActualizar}
+                pattern="^\S+$"
+                required
+              />
+            </Form.Group>
+            {error && <Alert variant="danger">{error}</Alert>}
           </Modal.Body>
-        </Modal>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseUpdateUsuario}>
+              Cancelar
+            </Button>
+            <Button variant="primary" type="submit">
+              Guardar cambios
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
 
-        <h2 className="fw-semibold text-secondary mt-5 mb-3">Tus publicaciones</h2>
+      {/* Publicaciones */}
+      <h2 className="mb-3" style={{ fontSize: '1.25rem', fontWeight: '600' }}>
+        Tus publicaciones
+      </h2>
+
+      {posts.length === 0 ? (
+        <Card>
+          <Card.Body className="text-center py-5">
+            <p className="text-muted mb-3">Aún no tenés publicaciones</p>
+            <Button variant="primary" onClick={() => navigate('/')}>
+              Ir a inicio
+            </Button>
+          </Card.Body>
+        </Card>
+      ) : (
         <Row>
-          {posts.map((post) => (
-            <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">
-              <Card style={{ width: '100%', cursor: 'pointer' }} onClick={() => manejarClickPost(post.id)}>
-                <Card.Body>
-                  <Card.Title>{usuario.nickName}</Card.Title>
-                  <Card.Text>
-                    {post.texto}
-                  </Card.Text>
-                  {post.Post_images && post.Post_images.length > 0 &&
-                    post.Post_images.map((img) => (
-                      <Card.Img
-                        key={img.id}
-                        variant="bottom"
-                        src={img.url}
-                        className="my-2"
-                      />
-                    ))
-                  }
-                  <CardFooter className="text-muted">
-                      Publicado el {post.createdAt ? new Date(post.createdAt).toLocaleString() : "Fecha desconocida"}
-                  </CardFooter>
-                </Card.Body>
-              </Card>
-            </Col>))}
+          {[...posts].reverse().map((post) => (
+            <Row key={post.id} className="mb-3">
+              <Col xs={11}>
+                <Card
+                  className="post-card"
+                  onClick={() => manejarClickPost(post.id)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <Card.Body>
+                    <Card.Text className="mb-2">{post.texto}</Card.Text>
+                    {post.Post_images && post.Post_images.length > 0 && (
+                      <div className="mb-2">
+                        {post.Post_images.map((img) => (
+                          <Card.Img
+                            key={img.id}
+                            src={img.url}
+                            className="my-2"
+                            style={{ borderRadius: '8px' }}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {post.Tags && post.Tags.length > 0 && (
+                      <div className="mb-2">
+                        {post.Tags.map((tag) => (
+                          <span
+                            key={tag.id}
+                            className="badge bg-secondary me-1"
+                            style={{ fontSize: '0.75rem' }}
+                          >
+                            {tag.texto}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="d-flex justify-content-between align-items-center mt-2">
+                      <small className="text-muted">
+                        {post.createdAt
+                          ? new Date(post.createdAt).toLocaleDateString('es-AR', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })
+                          : "Fecha desconocida"}
+                      </small>
+                      <small style={{ color: 'var(--accent-blue)' }}>
+                        Ver más →
+                      </small>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col xs={1} className="d-flex align-items-center">
+                <i className="bi bi-trash" style={{ cursor: 'pointer' }} onClick={handleShowEliminarPost}></i>
+              </Col>
+              <Modal show={showEliminarPost} onHide={handleCloseEliminarPost} centered className="text-center" size="sm">
+                <ModalTitle>¿Desea eliminar el post?</ModalTitle>
+                <ModalBody className="text-center">
+                  <Button variant="secondary" onClick={handleCloseEliminarPost} className="me-2">
+                    Cancelar
+                  </Button>
+                  <Button variant="primary" onClick={() => {
+                    eliminarPost(post.id)
+                    handleCloseEliminarPost()
+                  }}>
+                    Eliminar
+                  </Button>
+                </ModalBody>
+              </Modal>
+            </Row>
+          ))}
         </Row>
-      </Container>
-    </div>
+      )}
+    </Container>
   )
 }
+
+

@@ -8,7 +8,7 @@ import Post from "./pages/Post"
 import PostsTag from "./pages/PostsTag";
 import PerfilUsuario from "./pages/PerfilUsuario"
 import AuthProvider from "./context/AuthProvider";
-import CreatePost from "./components/createPost";
+import CreatePost from "./components/CreatePost";
 function App() {
   return (
     <AuthProvider>

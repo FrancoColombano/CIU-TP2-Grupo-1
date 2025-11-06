@@ -62,6 +62,11 @@ export default function Login() {
   const manejarSubmitLogin = (e: React.FormEvent) => {
     e.preventDefault()
     setError("") // Limpiar errores previos
+    
+    if (!loginForm.nickName || !loginForm.clave) {
+      setError("Todos los campos son obligatorios")
+      return
+    }
 
     if (loginForm.clave !== claveMaestra) {
       setError("Clave incorrecta")
@@ -74,6 +79,7 @@ export default function Login() {
       setError("Usuario no encontrado")
       return
     }
+
 
     login(usuarioEncontrado)
     navigate("/usuario")

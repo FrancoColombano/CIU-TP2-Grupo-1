@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import type { Post, Usuario } from "../types/tipos"
-import { Alert, Card, CardFooter, Col, Container, Row } from "react-bootstrap"
+import { Alert, Card, Col, Container, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([])
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]) // lista de usuarios obtenidos del backend
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]) 
   const [error, setError] = useState(null)
+  
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function Home() {
         if (!res.ok) throw new Error("Error al obtener los posts")
         return res.json()
       })
-      .then((data) => setPosts(data.reverse()))
+      .then((data) => setPosts(data))
       .catch((err) => setError(err.message))
   }, [posts])
 
@@ -43,39 +44,71 @@ export default function Home() {
       navigate(`/post/${id}`)
     }
   }
-  
+
   if (error) {
     return <Alert variant="danger">{error}</Alert>
   }
   return (
     <div>
+
       <Container className="my-3" >
         <h2>Feed de Publicaciones</h2>
         <Row>
-          {posts.map((post) => (
-            <Col key={post.id} lg={12} md={12} sm={12} className="mb-4">
-              <Card style={{ width: '100%', cursor: 'pointer'}} onClick={() => manejarClickPost(post.id)}>
+          {[...posts].reverse().map((post) => (
+            <Col key={post.id} xs={12} className="mb-3">
+              <Card
+                className="post-card"
+                onClick={() => manejarClickPost(post.id)}
+                style={{ cursor: 'pointer' }}
+              >
                 <Card.Body>
                   <Card.Title>{nombreUsuario(post.userId)}</Card.Title>
-                  <Card.Text>
-                    {post.texto}
-                  </Card.Text>
-                  {post.Post_images && post.Post_images.length > 0 &&
-                    post.Post_images.map((img) => (
-                      <Card.Img
-                        key={img.id}
-                        variant="bottom"
-                        src={img.url}
-                        className="my-2"
-                      />
-                    ))
-                  }
-                  <CardFooter className="text-muted">
-                      Publicado el {post.createdAt ? new Date(post.createdAt).toLocaleString() : "Fecha desconocida"}
-                  </CardFooter>
+                  <Card.Text className="mb-2">{post.texto}</Card.Text>
+                  {post.Post_images && post.Post_images.length > 0 && (
+                    <div className="mb-2">
+                      {post.Post_images.map((img) => (
+                        <Card.Img
+                          key={img.id}
+                          src={img.url}
+                          className="my-2"
+                          style={{ borderRadius: '8px' }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {post.Tags && post.Tags.length > 0 && (
+                    <div className="mb-2">
+                      {post.Tags.map((tag) => (
+                        <span
+                          key={tag.id}
+                          className="badge bg-secondary me-1"
+                          style={{ fontSize: '0.75rem' }}
+                        >
+                          {tag.texto}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="d-flex justify-content-between align-items-center mt-2">
+                    <small className="text-muted">
+                      {post.createdAt
+                        ? new Date(post.createdAt).toLocaleDateString('es-AR', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric'
+                        })
+                        : "Fecha desconocida"}
+                    </small>
+                    <small style={{ color: 'var(--accent-blue)' }}>
+                      Ver más →
+                    </small>
+                  </div>
                 </Card.Body>
               </Card>
-            </Col>))}
+            </Col>
+          ))}
         </Row>
       </Container>
     </div >

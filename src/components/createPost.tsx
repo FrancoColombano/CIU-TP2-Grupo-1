@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthProvider";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import type { Post, Post_image, Tag } from "../types/tipos";
 import { useNavigate } from "react-router-dom"
@@ -117,7 +117,7 @@ export default function CreatePost() {
         <>
             <Button variant="primary" onClick={handleShow} className="floating-button">+</Button>
             <Modal show={show} onHide={handleClose}>
-                <Form onSubmit={handleSubmit}>  {/* ✅ Form envuelve todo */}
+                <Form onSubmit={handleSubmit}> 
                     <Modal.Header closeButton>
                         <Modal.Title>{usuario?.nickName}</Modal.Title>
                     </Modal.Header>
@@ -178,7 +178,7 @@ export default function CreatePost() {
                         <Button variant="secondary" onClick={handleClose}>
                             Cancelar
                         </Button>
-                        <Button variant="primary" type="submit">  {/* ✅ Ahora SÍ está dentro del form */}
+                        <Button variant="primary" type="submit"> 
                             Crear Post
                         </Button>
                     </Modal.Footer>
